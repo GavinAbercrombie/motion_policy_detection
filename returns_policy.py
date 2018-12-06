@@ -80,19 +80,15 @@ for csv_file in os.listdir('resources/manifestos'):
 # put together data from 'texts' and 'manifesto_codes_dict'
 for k, v in manifesto_codes_dict.items():
     sentences.append(v)
-# extract data for testing:
+    
+# extract and combine strings from lists for testing:
 all_data = []
 class_labels = []
 for i in sentences:
-    all_data.append(LemmaTokenizer(i[0]) + ' ' + LemmaTokenizer(i[1]))
-    class_labels.append(i[-1])
-print('No. of "true" class labels (for both motion sentences + manifesto excerpts):',len(class_labels))
-
-# extract and combine strings from lists for testing:
-all_data = [] # store test strings here
-class_labels = []
-for i in sentences:
-    all_data.append(LemmaTokenizer(i[0]) + ' ' + LemmaTokenizer(i[1])) # needs to be adapted to handle more input
+    lemmastring = lemmatizer(i[0])
+    for j in range(1,2):
+        lemmastring += ' ' + lemmatizer(i[j])
+    all_data.append(lemmastring)
     class_labels.append(i[-1])
     
 # extract data for testing:
