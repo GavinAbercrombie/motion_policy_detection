@@ -8,7 +8,6 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import heapq
-from sklearn.metrics import cohen_kappa_score as ck
 
 print('Matching motions to policies ...\n')
 
@@ -141,7 +140,3 @@ for k, v in motions.items():
 print('\nNo. of matches:',score)
 
 print('\nRaw agreement:',(score/len(motions))*100,'%')
-
-# calculate cohen's kappa
-kappa = ck(agg_anns, cmp_codes)
-print("\nCohen's kappa:", kappa)
