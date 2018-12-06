@@ -49,11 +49,13 @@ for row in data:
 # get aggregate annotations and create list of sentences:
 sentences = []
 agg_anns = [] # for each motion, we're going to put the aggregation of all the qs annotations here
+all_annotations = []
 for k, v in motions.items():
     anns = [] # temporary list of annotations. Next, find most common code in list
     for i in v:
-        if i[-1] != '000': # allow non-000 codes to dominate if 000 is majority code
-            anns.append(i[-1])
+        #if i[-1] != '000': # allow non-000 codes to dominate if 000 is majority code
+        anns.append(i[-1])
+        all_annotations.append(i[-1])
         sentences.append(i)
     if len(anns) == 0:
         anns.append('000')
@@ -106,18 +108,16 @@ for i in sentences:
 # get motion + manifesto code text and perform tf-idf:
 tfidf_matrix = tfidf_vectorizer.fit_transform(all_data)
 
-# compare manual labels with matches from CMP and calculate agreement
-# need to reorganise to get motion + qs level results
+# compare matched CMP policy codes with annotated labels
 score = 0
 scores_dict = OrderedDict()
 count = 0
-seen_sents = 0 
-cmp_codes = []
+seen_sents = 0
+qs_level_codes = []
 for k, v in motions.items():
     print('******************************')
     title = v[0][0]
-    print(title)
-    print('Manual annotation:', agg_anns[count])
+    print(title, agg_anns[count])
     no_sents = len(v) # no. of sentences in the motion
     all_results = []
     for i in range(no_sents):
@@ -130,13 +130,15 @@ for k, v in motions.items():
         for result in top5:
             results.append(sentences[result][2])
         all_results.append(results[0])
+        qs_level_codes.append(results[0])
     agg_res = Counter(all_results).most_common(1)[0][0]
-    cmp_codes.append(agg_res)
-    print('Closest CMP policy:', agg_res)
+    print(agg_res)
     if agg_anns[count] == agg_res:
         score += 1
     seen_sents += no_sents
     count += 1
-print('\nNo. of matches:',score)
-
-print('\nRaw agreement:',(score/len(motions))*100,'%')
+print('\nMOTION LEVEL SCORE:',score)
+qs_score = len([i for i, j in zip(all_annotations, qs_level_codes) if i == j])
+print('\nQS LEVEL SCORE', qs_score)
+print('Raw motion-level agreement:',(score/len(motions))*100,'%')
+print('Raw qs-level agreement:',(qs_score/no_qs)*100,'%')
