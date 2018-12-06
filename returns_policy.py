@@ -8,6 +8,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import heapq
+from sklearn.metrics import cohen_kappa_score as ck
 
 print('Matching motions to policies ...\n')
 
@@ -106,11 +107,13 @@ for i in sentences:
 # get motion + manifesto code text and perform tf-idf:
 tfidf_matrix = tfidf_vectorizer.fit_transform(all_data)
 
+# compare manual labels with matches from CMP and calculate agreement
 # need to reorganise to get motion + qs level results
 score = 0
 scores_dict = OrderedDict()
 count = 0
 seen_sents = 0 
+cmp_codes = []
 for k, v in motions.items():
     print('******************************')
     title = v[0][0]
@@ -129,11 +132,16 @@ for k, v in motions.items():
             results.append(sentences[result][2])
         all_results.append(results[0])
     agg_res = Counter(all_results).most_common(1)[0][0]
+    cmp_codes.append(agg_res)
     print('Closest CMP policy:', agg_res)
     if agg_anns[count] == agg_res:
         score += 1
     seen_sents += no_sents
     count += 1
-print('No. of matches:',score)
+print('\nNo. of matches:',score)
 
-print('Accuracy:',(score/len(motions))*100,'%')
+print('\nRaw agreement:',(score/len(motions))*100,'%')
+
+# calculate cohen's kappa
+kappa = ck(class_labels, cmp_codes)
+print('\nCohen's kappa:', kappa)
