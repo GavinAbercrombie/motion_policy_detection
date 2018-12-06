@@ -143,5 +143,5 @@ print('\nNo. of matches:',score)
 print('\nRaw agreement:',(score/len(motions))*100,'%')
 
 # calculate cohen's kappa
-kappa = ck(class_labels, cmp_codes)
+kappa = ck(agg_anns, cmp_codes)
 print("\nCohen's kappa:", kappa)
