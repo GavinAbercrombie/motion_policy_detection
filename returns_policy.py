@@ -144,4 +144,4 @@ print('\nRaw agreement:',(score/len(motions))*100,'%')
 
 # calculate cohen's kappa
 kappa = ck(class_labels, cmp_codes)
-print("\nCohen"s kappa:', kappa)
+print("\nCohen's kappa:", kappa)
