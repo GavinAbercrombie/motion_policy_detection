@@ -1,5 +1,5 @@
 ### Matches Hansard HoC debate motions and motion quasi-sentences 
-### to codes from the Comparative Manifesto Project.
+### to policy codes from the Comparative Manifesto Project.
 
 import os, csv
 from collections import Counter, OrderedDict
