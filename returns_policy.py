@@ -112,7 +112,8 @@ seen_sents = 0
 for k, v in motions.items():
     print('******************************')
     title = v[0][0]
-    print(title, agg_anns[count])
+    print(title)
+    print('Manual annotation:', agg_anns[count])
     no_sents = len(v) # no. of sentences in the motion
     all_results = []
     for i in range(no_sents):
@@ -126,7 +127,7 @@ for k, v in motions.items():
             results.append(sentences[result][2])
         all_results.append(results[0])
     agg_res = Counter(all_results).most_common(1)[0][0]
-    print(agg_res)
+    print('Closest CMP policy:', agg_res)
     if agg_anns[count] == agg_res:
         score += 1
     seen_sents += no_sents
