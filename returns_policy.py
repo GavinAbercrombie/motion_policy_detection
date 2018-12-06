@@ -9,6 +9,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import heapq
 
+print('Matching motions to policies ...\n')
+
 def lemmatizer(text):
     """Input: string of 1 or more words,
     output: string of corresponding lemmas"""
